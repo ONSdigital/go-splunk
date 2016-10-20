@@ -14,12 +14,12 @@ Follow [these instructions](https://developers.google.com/identity/protocols/app
 to establish a Google service account and set up the `GOOGLE_APPLICATION_CREDENTIALS`
 environment variable with a route to the JSON you created.
 
-Share any calendars you want the script to access with the service account address.
+Share any services (calendars, analytics, etc...) you want this service to access with the service account address.
 
 Optional: Set up whatever monitoring you need to read the stdout of the machine
 you are running from.
 
-Run the script `go run main.go` from the source code (or eventually just from a release, details to follow).
+Run the service `go run main.go` from the source code (or eventually just from a release, details to follow).
 
 #### License
 
