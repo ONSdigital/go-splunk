@@ -1,26 +1,26 @@
 package auth
 
 import (
-	calendar "google.golang.org/api/calendar/v3"
+	"net/http"
 
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 )
 
-//Service reads credentials from a local file and establishes a client with access
-//to google's calendar API.
-func Service() *calendar.Service {
+//Client is a generic method for authenticating with google and return a
+//client for the given google area.
+func Client(scope string, create func(*http.Client) (interface{}, error)) interface{} {
 	ctx := context.Background()
 
-	ts, err := google.DefaultTokenSource(ctx, calendar.CalendarReadonlyScope)
+	ts, err := google.DefaultTokenSource(ctx, scope)
 	if err != nil {
 		panic(err)
 	}
 	client := oauth2.NewClient(ctx, ts)
-	calendar, err := calendar.New(client)
+	c, err := create(client)
 	if err != nil {
 		panic(err)
 	}
-	return calendar
+	return c
 }

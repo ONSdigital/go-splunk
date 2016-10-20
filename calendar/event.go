@@ -1,6 +1,25 @@
-package cal
+package calendar
 
-import "google.golang.org/api/calendar/v3"
+import (
+	"net/http"
+
+	"github.com/ONSdigital/go-splunk/auth"
+	gcal "google.golang.org/api/calendar/v3"
+)
+
+//Calendar holds a google calendar service connection
+type Calendar gcal.Service
+
+//New reads credentials from a local file and establishes a client with access
+//to google's calendar API.
+func New() Calendar {
+	fn := func(c *http.Client) (interface{}, error) {
+		return gcal.New(c)
+	}
+	c := auth.Client(gcal.CalendarReadonlyScope, fn).(Calendar)
+
+	return c
+}
 
 //Event is a subset of the google calendar event for logging out human details
 //rather than google metadata.
@@ -18,7 +37,7 @@ type Event struct {
 }
 
 //Convert a google calendar event to a flattened smaller Event struct.
-func Convert(item *calendar.Event) *Event {
+func Convert(item *gcal.Event) *Event {
 	// If the DateTime is an empty string the Event is an all-day Event.
 	// So only Date is available.
 	start := item.Start.Date
