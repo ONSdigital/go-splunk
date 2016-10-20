@@ -1,9 +1,9 @@
-## Google Calendar - JSON Event Builder
+## Google Data to JSON message builder
 
-This script is designed to authorize with Google to read Calendar events and
-convert the current day's events into JSON. The intention behind it is to
-generate a log file which can be used in a log aggregator or event monitoring
-service.
+This script is designed to authorize with Google to read various private Google
+sources and convert the relevant data from the responses into JSON.
+The intention behind it is to generate a log file which can be used in a log
+aggregator or event monitoring service.
 
 A specific use for this may be to overlay maintenance windows or a support
 schedule into a monitoring service such as Splunk.
