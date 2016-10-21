@@ -3,42 +3,40 @@ package calendar
 import (
 	"encoding/json"
 	"log"
-	"os"
 	"strings"
 	"time"
 )
 
-//Check the list of calendars the service is authorized to access and convert
-//any events in the next 24 hours to JSON.
-func (c Calendar) Check() {
-	list, err := c.CalendarList.List().Do()
+/*Check the list of calendars the service is authorized to access and convert
+any events in the next 24 hours to JSON.*/
+func (c *Calendar) Check() {
+	calendarList, err := c.CalendarList.List().Do()
 	if err != nil {
 		log.Fatalf("Could not retrieve calendars %v", err.Error())
 	}
 
-	today, tomorrow := limitDates()
+	//For each calendar google has a record of, load the events and ouput them
+	for _, gcal := range calendarList.Items {
 
-	for _, ci := range list.Items {
-		events, err := c.Events.List(ci.Id).ShowDeleted(false).
-			SingleEvents(true).TimeMin(today).TimeMax(tomorrow).OrderBy("startTime").Do()
+		today, tomorrow := limitDates()
+		if ok := c.loadEvents(gcal.Id, today, tomorrow); !ok {
+			break
+		}
+		c.Output()
+	}
+}
+
+//Output a subset of details for a list of Google calendar events as a JSON string
+func (c *Calendar) Output() {
+	for _, ge := range c.GEvents {
+		e := convert(ge)
+
+		data, err := json.Marshal(e)
 		if err != nil {
-			log.Fatalf("Unable to retrieve todays events. %v", err.Error())
+			log.Printf("Failed to marshal json: %v", err.Error())
+			continue
 		}
-
-		if len(events.Items) == 0 {
-			log.Println("There are no events today.")
-			os.Exit(1)
-		}
-
-		for _, i := range events.Items {
-			e := Convert(i)
-
-			data, err := json.Marshal(e)
-			if err != nil {
-				log.Fatalf("Failed to marshal json: %v", err.Error())
-			}
-			log.Println(string(data))
-		}
+		log.Println(string(data))
 	}
 }
 
