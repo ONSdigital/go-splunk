@@ -10,7 +10,7 @@ import (
 /*Check the list of calendars the service is authorized to access and convert
 any events in the next 24 hours to JSON.*/
 func (c *Calendar) Check() {
-	calendarList, err := c.CalendarList.List().Do()
+	calendarList, err := c.Service.CalendarList.List().Do()
 	if err != nil {
 		log.Fatalf("Could not retrieve calendars %v", err.Error())
 	}
@@ -28,7 +28,7 @@ func (c *Calendar) Check() {
 
 //Output a subset of details for a list of Google calendar events as a JSON string
 func (c *Calendar) Output() {
-	for _, ge := range c.GEvents {
+	for _, ge := range c.Events {
 		e := convert(ge)
 
 		data, err := json.Marshal(e)

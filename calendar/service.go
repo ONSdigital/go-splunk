@@ -10,8 +10,8 @@ import (
 
 //Calendar holds a google calendar service connection
 type Calendar struct {
-	gcal.Service
-	GEvents []*gcal.Event
+	Service *gcal.Service
+	Events  []*gcal.Event
 }
 
 //New reads credentials from a local file and establishes a client with access
@@ -20,9 +20,10 @@ func New() *Calendar {
 	new := func(c *http.Client) (interface{}, error) {
 		return gcal.New(c)
 	}
-	cal := auth.Client(gcal.CalendarReadonlyScope, new).(Calendar)
+	c := &Calendar{}
+	c.Service = auth.Client(gcal.CalendarReadonlyScope, new).(*gcal.Service)
 
-	return &cal
+	return c
 }
 
 //Load the events in a 24 hour period for the given calendar from Google
@@ -38,12 +39,12 @@ func (c *Calendar) loadEvents(id string, earliest string, latest string) bool {
 		return false
 	}
 
-	c.GEvents = events.Items
+	c.Events = events.Items
 	return true
 }
 
 func (c *Calendar) queryEvents(id string, today string, tomorrow string) (*gcal.Events, error) {
-	return c.Events.
+	return c.Service.Events.
 		List(id).
 		ShowDeleted(false).
 		SingleEvents(true).

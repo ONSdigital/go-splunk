@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	calPer := 3600 //will be configurable
+	calPer := 10 //will be configurable
 	cal := calendar.New()
 	_ = analytics.New()
 

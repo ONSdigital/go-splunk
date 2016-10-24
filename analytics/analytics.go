@@ -8,15 +8,19 @@ import (
 )
 
 //Analytics holds a google analytics service connection
-type Analytics ga.Service
+type Analytics struct {
+	Service *ga.Service
+}
 
 //New reads credentials from a local file and establishes a client with access
 //to google's analytics API.
-func New() Analytics {
+func New() *Analytics {
 	fn := func(c *http.Client) (interface{}, error) {
 		return ga.New(c)
 	}
-	c := auth.Client(ga.AnalyticsReadonlyScope, fn).(Analytics)
 
-	return c
+	a := &Analytics{}
+	a.Service = auth.Client(ga.AnalyticsReadonlyScope, fn).(*ga.Service)
+
+	return a
 }
