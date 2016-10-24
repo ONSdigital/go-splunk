@@ -31,7 +31,7 @@ func (c *Calendar) Output() {
 	for _, googleEvent := range c.Events {
 		customEvent := convert(googleEvent)
 
-		data, err := json.Marshal(e)
+		data, err := json.Marshal(customEvent)
 		if err != nil {
 			log.Printf("Failed to marshal json: %v", err.Error())
 			continue
