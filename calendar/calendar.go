@@ -28,8 +28,8 @@ func (c *Calendar) Check() {
 
 //Output a subset of details for a list of Google calendar events as a JSON string
 func (c *Calendar) Output() {
-	for _, ge := range c.Events {
-		e := convert(ge)
+	for _, googleEvent := range c.Events {
+		customEvent := convert(googleEvent)
 
 		data, err := json.Marshal(e)
 		if err != nil {

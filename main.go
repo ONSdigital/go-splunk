@@ -14,7 +14,9 @@ func main() {
 
 	calTicker := time.NewTicker(time.Second * time.Duration(calPer)).C
 
-	//monitor channels to perform task when each ticker activates
+	//Wait for any ticker to send a message via its channel.
+	//The channel will wait for its case to be selected, then become inactive
+	//until it's ticker rolls over again.
 	for {
 		select {
 		case <-calTicker:
