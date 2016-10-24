@@ -3,6 +3,7 @@ package auth
 import (
 	"net/http"
 
+	"github.com/ONSdigital/go-ns/log"
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
@@ -15,12 +16,12 @@ func Client(scope string, create func(*http.Client) (interface{}, error)) interf
 
 	ts, err := google.DefaultTokenSource(ctx, scope)
 	if err != nil {
-		panic(err)
+		log.ErrorC("authentication", err, nil)
 	}
 	client := oauth2.NewClient(ctx, ts)
 	c, err := create(client)
 	if err != nil {
-		panic(err)
+		log.ErrorC("authentication", err, nil)
 	}
 	return c
 }

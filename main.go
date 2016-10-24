@@ -3,11 +3,13 @@ package main
 import (
 	"time"
 
+	"github.com/ONSdigital/go-ns/log"
 	"github.com/ONSdigital/go-splunk/analytics"
 	"github.com/ONSdigital/go-splunk/calendar"
 )
 
 func main() {
+	log.Namespace = "go-splunk"
 	calPer := 10 //will be configurable
 	cal := calendar.New()
 	_ = analytics.New()
