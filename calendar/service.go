@@ -2,6 +2,7 @@ package calendar
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/ONSdigital/go-ns/log"
 	"github.com/ONSdigital/go-splunk/auth"
@@ -11,17 +12,19 @@ import (
 //Calendar holds a google calendar service connection
 type Calendar struct {
 	Service *gcal.Service
+	Ticker  <-chan time.Time
 	Events  []*gcal.Event
 }
 
 //New reads credentials from a local file and establishes a client with access
 //to google's calendar API.
-func New() *Calendar {
+func New(period *int) *Calendar {
 	new := func(c *http.Client) (interface{}, error) {
 		return gcal.New(c)
 	}
 	c := &Calendar{}
 	c.Service = auth.Client(gcal.CalendarReadonlyScope, new).(*gcal.Service)
+	c.Ticker = time.NewTicker(time.Second * time.Duration(*period)).C
 
 	return c
 }

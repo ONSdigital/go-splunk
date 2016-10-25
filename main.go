@@ -1,7 +1,7 @@
 package main
 
 import (
-	"time"
+	"flag"
 
 	"github.com/ONSdigital/go-ns/log"
 	"github.com/ONSdigital/go-splunk/analytics"
@@ -10,18 +10,19 @@ import (
 
 func main() {
 	log.Namespace = "go-splunk"
-	calPer := 10 //will be configurable
-	cal := calendar.New()
-	_ = analytics.New()
 
-	calTicker := time.NewTicker(time.Second * time.Duration(calPer)).C
+	calPer := flag.Int("cal-period", 3600, "number of seconds to wait before checking for calendar updates")
+	flag.Parse()
+
+	cal := calendar.New(calPer)
+	_ = analytics.New()
 
 	//Wait for any ticker to send a message via its channel.
 	//The channel will wait for its case to be selected, then become inactive
 	//until it's ticker rolls over again.
 	for {
 		select {
-		case <-calTicker:
+		case <-cal.Ticker:
 			go cal.Check()
 			//	case <-alyTicker:
 			//		go aly.Check()
