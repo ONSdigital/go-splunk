@@ -9,20 +9,8 @@ import (
 
 func TestEvent(t *testing.T) {
 	Convey("Given a google calendar event", t, func() {
-		creator := &gcal.EventCreator{
-			DisplayName: "bob",
-			Email:       "bob@google.com",
-		}
-
-		ge := &gcal.Event{
-			ColorId:     "color",
-			Creator:     creator,
-			Description: "this is a test event",
-			Id:          "testevent1",
-			Kind:        "kind",
-			Status:      "good",
-			Summary:     "Event Test Appointment",
-		}
+		events := createEvents(1, false)
+		ge := events[0]
 
 		Convey("When it's an all day event", func() {
 			date := "2016-10-24"

@@ -3,7 +3,6 @@ package calendar
 import (
 	"bytes"
 	"io"
-	//"log"
 	"os"
 	"strconv"
 	"strings"
@@ -15,7 +14,7 @@ import (
 )
 
 func TestCalendar(t *testing.T) {
-	Convey("Given a time", t, func() {
+	Convey("Given the current time", t, func() {
 		now := time.Now()
 
 		Convey("When setMidnight is called", func() {
@@ -50,9 +49,11 @@ func TestCalendar(t *testing.T) {
 	Convey("Given a Calendar with a list of 2 google events", t, func() {
 		c := &Calendar{}
 		eventNum := 2
-		c.Events = createEvents(eventNum)
+		c.Events = createEvents(eventNum, true)
+
 		Convey("When Output is called", func() {
 			output := captureOutput(c.Output)
+
 			Convey("The log should be using the structured format", func() {
 				So(output, ShouldContainSubstring, "\"namespace\"")
 			})
@@ -64,7 +65,7 @@ func TestCalendar(t *testing.T) {
 	})
 }
 
-func createEvents(num int) []*gcal.Event {
+func createEvents(num int, withDates bool) []*gcal.Event {
 	list := []*gcal.Event{}
 	date := "2016-10-24"
 	for x := 0; x < num; x++ {
@@ -73,26 +74,29 @@ func createEvents(num int) []*gcal.Event {
 			DisplayName: "bob" + strconv.Itoa(x),
 			Email:       "bob" + strconv.Itoa(x) + "@google.com",
 		}
-		start := &gcal.EventDateTime{
-			Date:     date,
-			DateTime: "",
-		}
-
-		end := &gcal.EventDateTime{
-			Date:     date,
-			DateTime: "",
-		}
 
 		item := &gcal.Event{
 			ColorId:     "color" + strconv.Itoa(x),
 			Creator:     creator,
 			Description: "this is a test event" + strconv.Itoa(x),
-			End:         end,
 			Id:          "testevent" + strconv.Itoa(x),
 			Kind:        "kind" + strconv.Itoa(x),
 			Status:      "good" + strconv.Itoa(x),
-			Start:       start,
 			Summary:     "Event Test Appointment" + strconv.Itoa(x),
+		}
+
+		if withDates {
+			start := &gcal.EventDateTime{
+				Date:     date,
+				DateTime: "",
+			}
+
+			end := &gcal.EventDateTime{
+				Date:     date,
+				DateTime: "",
+			}
+			item.End = end
+			item.Start = start
 		}
 
 		list = append(list, item)
