@@ -1,6 +1,7 @@
 package calendar
 
 import (
+	"strconv"
 	"testing"
 
 	. "github.com/smartystreets/goconvey/convey"
@@ -45,4 +46,42 @@ func TestEvent(t *testing.T) {
 			})
 		})
 	})
+}
+
+func createEvents(num int, withDates bool) []*gcal.Event {
+	list := []*gcal.Event{}
+	date := "2016-10-24"
+	for x := 0; x < num; x++ {
+
+		creator := &gcal.EventCreator{
+			DisplayName: "bob" + strconv.Itoa(x),
+			Email:       "bob" + strconv.Itoa(x) + "@google.com",
+		}
+
+		item := &gcal.Event{
+			ColorId:     "color" + strconv.Itoa(x),
+			Creator:     creator,
+			Description: "this is a test event" + strconv.Itoa(x),
+			Id:          "testevent" + strconv.Itoa(x),
+			Kind:        "kind" + strconv.Itoa(x),
+			Summary:     "Event Test Appointment" + strconv.Itoa(x),
+		}
+
+		if withDates {
+			start := &gcal.EventDateTime{
+				Date:     date,
+				DateTime: "",
+			}
+
+			end := &gcal.EventDateTime{
+				Date:     date,
+				DateTime: "",
+			}
+			item.End = end
+			item.Start = start
+		}
+
+		list = append(list, item)
+	}
+	return list
 }

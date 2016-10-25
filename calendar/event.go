@@ -15,7 +15,6 @@ type event struct {
 	ID           string `json:"id,omitempty"`
 	Kind         string `json:"kind,omitempty"`
 	Start        string `json:"start,omitempty"`
-	Status       string `json:"status,omitempty"`
 	Summary      string `json:"summary,omitempty"`
 }
 
@@ -39,7 +38,6 @@ func convert(item *gcal.Event) *event {
 		ID:           item.Id,
 		Kind:         item.Kind,
 		Start:        start,
-		Status:       item.Status,
 		Summary:      item.Summary,
 	}
 }
