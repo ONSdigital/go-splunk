@@ -19,6 +19,7 @@ func (c *Calendar) Check() {
 	today, tomorrow := limitDates()
 
 	//For each calendar google has a record of, load the events and ouput them
+	//TODO - IF CONFIG ITEM (SINGLE-CALENDAR) PROVIDED, ONLY RETURN RESULTS FROM THAT, NOT LOOP
 	for _, gcal := range calendarList.Items {
 		if ok := c.loadEvents(gcal.Id, today, tomorrow); !ok {
 			break
