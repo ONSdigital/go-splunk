@@ -1,10 +1,12 @@
-package cal
+package calendar
 
-import "google.golang.org/api/calendar/v3"
+import (
+	gcal "google.golang.org/api/calendar/v3"
+)
 
-//Event is a subset of the google calendar event for logging out human details
+//event is a subset of the google calendar event for logging out human details
 //rather than google metadata.
-type Event struct {
+type event struct {
 	ColorID      string `json:"colorId,omitempty"`
 	CreatorName  string `json:"creatorName,omitempty"`
 	CreatorEmail string `json:"creatorEmail,omitempty"`
@@ -17,10 +19,9 @@ type Event struct {
 	Summary      string `json:"summary,omitempty"`
 }
 
-//Convert a google calendar event to a flattened smaller Event struct.
-func Convert(item *calendar.Event) *Event {
-	// If the DateTime is an empty string the Event is an all-day Event.
-	// So only Date is available.
+func convert(item *gcal.Event) *event {
+	/* If the DateTime is an empty string the Event is an all-day Event.
+	so only Date is available. */
 	start := item.Start.Date
 	if item.Start.DateTime != "" {
 		start = item.Start.DateTime
@@ -29,7 +30,7 @@ func Convert(item *calendar.Event) *Event {
 	if item.End.DateTime != "" {
 		end = item.End.DateTime
 	}
-	return &Event{
+	return &event{
 		ColorID:      item.ColorId,
 		CreatorName:  item.Creator.DisplayName,
 		CreatorEmail: item.Creator.Email,
