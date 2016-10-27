@@ -1,9 +1,9 @@
 package calendar
 
 import (
-	"log"
 	"net/http"
 
+	"github.com/ONSdigital/go-ns/log"
 	"github.com/ONSdigital/go-splunk/auth"
 	gcal "google.golang.org/api/calendar/v3"
 )
@@ -30,12 +30,14 @@ func New() *Calendar {
 func (c *Calendar) loadEvents(id string, earliest string, latest string) bool {
 	events, err := c.queryEvents(id, earliest, latest)
 	if err != nil {
-		log.Printf("Unable to retrieve todays events. %v", err.Error())
+		data := make(map[string]interface{})
+		data["args"] = []string{id, earliest, latest}
+		log.ErrorC("Unable to retrieve todays events.", err, data)
 		return false
 	}
 
 	if len(events.Items) == 0 {
-		log.Println("There are no events today.")
+		log.Debug("There are no events today.", nil)
 		return false
 	}
 
