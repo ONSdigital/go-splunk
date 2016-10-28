@@ -1,0 +1,64 @@
+{
+  "metrics": [
+    {
+      "name": "today",
+      "frequency": "hourly",
+      "query": {
+        "dimensions": "ga:hour",
+        "metrics": "ga:sessions",
+        "start-date": "today",
+        "end-date": "today"
+      },
+      "meta": {
+        "name": "Today",
+        "description": "Today's visits to the website."
+      }
+    },
+    {
+      "name": "devices",
+      "frequency": "daily",
+      "query": {
+        "dimensions": "ga:deviceCategory",
+        "metrics": "ga:sessions",
+        "sort": "-ga:sessions",
+        "start-date": "90daysAgo",
+        "end-date": "yesterday"
+      },
+      "meta": {
+        "name": "Devices",
+        "description": "90 days of desktop/mobile/tablet visits for all sites."
+      }
+    },
+    {
+      "name": "browsers",
+      "frequency": "daily",
+      "query": {
+        "dimensions": "ga:browser",
+        "metrics": "ga:sessions",
+        "sort": "-ga:sessions",
+        "start-date": "90daysAgo",
+        "end-date": "yesterday"
+      },
+      "meta": {
+        "name": "Browsers",
+        "description": "90 days of Browser visits for all sites."
+      }
+    },
+    {
+      "name": "top-traffic-sources-30-days",
+      "frequency": "daily",
+      "query": {
+        "dimensions": "ga:source,ga:hasSocialSourceReferral",
+        "metrics": "ga:sessions,ga:pageviews,ga:users,ga:pageviewsPerSession,ga:avgSessionDuration,ga:exits",
+        "start-date": "30daysAgo",
+        "end-date": "yesterday",
+        "sort": "-ga:sessions",
+        "max-results": "20"
+      },
+      "meta": {
+        "name": "Top Traffic Sources (30 Days)",
+        "description": "Sources, measured by visits and users, for all pages."
+      }
+    }
+  ]
+}
