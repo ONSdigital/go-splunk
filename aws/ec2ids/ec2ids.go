@@ -46,20 +46,18 @@ func main() {
 
 		// Instances can be iterated over from within the response
 		for _, inst := range resp.Reservations[idx].Instances {
-
-			// Each instance can have 0, 1 or multiple tags
-			for _, tag := range inst.Tags {
-				tag_value := *tag.Value
-
-				// Only check ids match if args supplied
-				if len(args) > 0 {
+			// Only check ids match if args supplied
+			if len(args) > 0 {
+				// Each instance can have 0, 1 or multiple tags
+				for _, tag := range inst.Tags {
+					tag_value := *tag.Value
 					if stringInSlice(tag_value, args) {
 						fmt.Printf("%v,%v\n", tag_value, inst.InstanceId)
 					}
-					// Otherwise print all ids
-				} else {
-					fmt.Printf("%v,%v\n", tag_value, inst.InstanceId)
+
 				}
+			} else {
+				fmt.Printf("%v,%v\n", "", inst.InstanceId)
 			}
 		}
 	}
