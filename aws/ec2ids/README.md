@@ -14,10 +14,11 @@ This can be used as a splunk lookup to identify specific EC2 instances of intere
 
 Create a config file with your AWS access keys as per [these instructions](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html#cli-multiple-profiles).
 
-Run the service `go run ec2ids.go` from the source code.
+Run the service `go run ec2ids.go <tag-value-1> [<tag-value-2>] ... [<tag-value-n>] ` from the source code.
 
 #### License
 
 Copyright ©‎ 2017, Office for National Statistics (https://www.ons.gov.uk)
 
 Released under MIT license, see [LICENSE](LICENSE.md) for details.
+sublime 
