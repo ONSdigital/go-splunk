@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ec2"
 )
@@ -53,11 +54,13 @@ func main() {
 	// Create an EC2 service object in the "eu-west-1" region
 	// Note that you can also configure your region globally by
 	// exporting the AWS_REGION environment variable
-	svc := ec2.New(sess)
+	svc := ec2.New(sess, &aws.Config{Region: aws.String("eu-west-1")})
 
 	// Call the DescribeInstances Operation
 	resp, err := svc.DescribeInstances(nil)
 	if err != nil {
+		fmt.Println("Error describing instances")
+		fmt.Println(err)
 		os.Exit(1)
 	}
 
